@@ -1,31 +1,61 @@
-import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import ru.mail.model.Book;
-
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Library {
-	Book[] lib;
 
-	public Library() throws IOException {
-		this.lib = readData("books.txt");
-	}
+	private final List<Book> lib;
 
-	public Book[] readData(@NotNull String path) throws IOException {
+	public Library(int libSize,BooksFactory factory) {
 
-		FileReader file = new FileReader(path);
+		lib = new ArrayList<>(libSize);
 
-		//JsonReader reader = new JsonReader(new InputStreamReader(in, StandardCharsets.UTF_8));
-		StringBuilder info = new StringBuilder();
-		int r;
-		while((r=file.read())!=-1){
-			info.append((char) r);
+		if(factory.books().size()>libSize){
+			throw new ArrayIndexOutOfBoundsException("File more than Array size");
+		}
+		else {
+			for(int i=0; i<libSize;i++){
+				if(i<factory.books().size()){
+					lib.add((Book) factory.books().toArray()[i]);
+				}
+			}
 		}
 
-		Gson gson = new Gson();
-		//Type listType = new TypeToken<ArrayList<Book>>(){}.getType();
+	}
 
-		return gson.fromJson(String.valueOf(info), Book[].class);
+	public String getBook(int i) {
+		Book book = lib.get(i);
+		if(book == null){
+			throw new NullPointerException("No such book");
+		}
+		else {
+			return book.toString();
+		}
+	}
+
+	public void addBook(@NotNull Book book){
+		for(int i =0;i<lib.size();i++){
+			if(lib.get(i)==null){
+				lib.set(i,book);
+				return;
+			}
+		}
+		throw new IndexOutOfBoundsException("Library is out of space");
+	}
+
+	public String printBooks(){
+		return lib.toString();
+	}
+
+	//outputs all Library books
+	public void printAll(){
+
+		System.out.println("\nAll books\n");
+		for(Book book: lib){
+			System.out.println(book.toString());
+		}
 	}
 
 }

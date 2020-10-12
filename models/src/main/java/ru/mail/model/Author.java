@@ -9,5 +9,4 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Author {
 	final String name;
-	final String surname;
 }

@@ -9,6 +9,14 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Book {
 	final Author author;
-	final String title;
-	final String year;
+	final String name;
+
+	@Override
+	public String toString() {
+		return "Book{" +
+						"author=" + author.getName() +
+						", name='" + name + '\'' +
+						'}';
+	}
 }
+
